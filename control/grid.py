@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import utlis
 import maxmin
+import pyuart
 #cv2.resize(src, dsize, dst=None, fx=0, fy=0, interpolation=cv2.INTER_LINEAR)
 
 
@@ -63,7 +64,8 @@ while True:
     board_avg = board_avg / 10
     #print_board_avg()
     connect_str=gen_connect()
-    print(connect_str)
+    #pyuart.send_message_once(connect_str)
+    print('observe',connect_str)
     maxmin.one_step(connect_str)
 
 
