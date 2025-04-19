@@ -86,16 +86,19 @@ def findcircles(img,draw=True,cThr=[50,80]):
             # 绘制圆的外圆
             cv2.circle(img, (i[0], i[1]), i[2], (0, 255, 0), 2)
             # 绘制圆的中心
-            cv2.circle(img, (i[0], i[1]), 2, (0, 0, 255), 3)
+           # cv2.circle(img, (i[0], i[1]), 2, (0, 0, 255), 3)
            # print(i)
             gray_light=0
             count=0
-            for dx in range(-10,11):
-                for dy in range(-10,11):
+            for dx in range(-2,3):
+                for dy in range(-2,3):
                     if 0 <= i[0] + dx < imgGray.shape[1] and 0 <= i[1] + dy < imgGray.shape[0]:
-                        gray_light+=imgGray[i[0]+dx,i[1]+dy]
+                        gray_light+=imgGray[i[1]+dy,i[0]+dx]
+                        #print(i[0]+dx,i[1]+dy,'liangdu=',imgGray[i[1]+dy,i[0]+dx])
                         count+=1
             gray_light=int(gray_light/count)
+            cv2.imshow('gray_light',imgGray)
+            #print(i[0],i[1],i[2],gray_light,count)
             pieces.append((i[0]//100+1,i[1]//100+1,1 if gray_light>100 else -1))
             pieces_gray.append(gray_light)
             
