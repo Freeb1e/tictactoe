@@ -2,12 +2,12 @@ import cv2
 import numpy as np
 import utlis
 import maxmin
-import pyuart
+#import pyuart
 #cv2.resize(src, dsize, dst=None, fx=0, fy=0, interpolation=cv2.INTER_LINEAR)
 
 
 
-webcam = False
+webcam = True
 path = 'control/5.jpg'
 cap=cv2.VideoCapture(1)
 #cap.set(3,1280)
@@ -45,8 +45,8 @@ while True:
             if (webcam):success,img = cap.read()
             else: img = cv2.imread(path)
         # print(img.shape)
-            img,conts = utlis.getContours(img,showCanny=True,draw=True,minArea=500,filter=4) 
-            cv2.imshow("org0", img)
+            img,conts = utlis.getContours(img,showCanny=False,draw=True,minArea=500,filter=4) 
+            #cv2.imshow("org0", img)
             boardob = np.zeros((3,3))
             if len(conts) != 0:
                 biggest = conts[0][2]
@@ -62,7 +62,7 @@ while True:
     #break
     
     board_avg = board_avg / 10
-    #print_board_avg()
+    print_board_avg()
     connect_str=gen_connect()
     #pyuart.send_message_once(connect_str)
     print('observe',connect_str)

@@ -60,18 +60,24 @@ def warpImg(img,points,w,h):
     return imgWarp
 
 
-def findcircles(img,draw=True,cThr=[100,100]):
+def findcircles(img,draw=True,cThr=[50,80]):
     pieces = []
     pieces_gray = []
     imgGray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    
+    alpha =1.5 # 对比度增益（>1 增强对比度）
+    beta = 0     # 亮度偏移
+    #img = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
     imgBlur = cv2.GaussianBlur(imgGray,(5,5),1)
+    cv2.imshow('blur',imgBlur)
     imgCanny = cv2.Canny(imgBlur,cThr[0],cThr[1])
     kernel = np.ones((3,3))
+
     imgDial = cv2.dilate(imgCanny,kernel,iterations=3)
     imgThre = cv2.erode(imgDial,kernel,iterations=2)
     if draw:
         cv2.imshow('precircle',imgThre)
-    circles=cv2.HoughCircles(imgThre,cv2.HOUGH_GRADIENT,1,20,param1=100,param2=35,minRadius=0,maxRadius=0)
+    circles=cv2.HoughCircles(imgThre,cv2.HOUGH_GRADIENT,1,20,param1=80,param2=30,minRadius=20,maxRadius=0)
     
         # 确保至少检测到一个圆
     if circles is not None:
