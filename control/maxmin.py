@@ -1,6 +1,6 @@
 import numpy as np
 import random
-#import pyuart
+import pyuart
 board=[
         [' ',' ',' '],
         [' ',' ',' '],
@@ -53,9 +53,11 @@ def minimax(mode,top):
         x,y = random.choice(best_moves)
         if top:
             board[x][y]='X' 
-            move=f"{x}{y}"
-           # pyuart.send_message_once(move)
+            #move=f"{x}{y}"
+            move = 3*x+y+1
+           # pyuart.send_message_once(str(move))
             print('send:',move)
+            return move
             #print('choose:',i+1,j+1)
             #for i in range(len(scores)):
                # print(scores[i],'zuobiao:',moves[i][0]+1,moves[i][1]+1)          
@@ -132,14 +134,16 @@ def one_step(board_ob):
     if len(find_empty(board))==9:
         x,y=random.choice([(0,0),(0,2),(2,0),(2,2)])
         board[x][y]='X'
+        move = 3*x+y+1
+       # pyuart.send_message_once(str(move))
     else :
-        minimax('X',True)
+       move= minimax('X',True)
     if is_win(board,'X'):
         print('X win')
         print_board()
         return
     print_board()
-    return 
+    return str(move)
 
 
 #while True:

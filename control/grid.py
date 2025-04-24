@@ -2,14 +2,14 @@ import cv2
 import numpy as np
 import utlis
 import maxmin
-#import pyuart
+import pyuart
 #cv2.resize(src, dsize, dst=None, fx=0, fy=0, interpolation=cv2.INTER_LINEAR)
 
 
 
 webcam = True
 path = 'control/5.jpg'
-cap=cv2.VideoCapture(1)
+cap=cv2.VideoCapture(0)
 #cap.set(3,1280)
 #cap.set(4,720)
 #wP=210
@@ -40,6 +40,7 @@ def gen_connect():
 board_avg = np.zeros((3,3))
 #cap.set(10,1000)
 while True:
+    input('press any key to continue')
     board_avg = np.zeros((3,3))
     for i in range(10):
             if (webcam):success,img = cap.read()
@@ -66,8 +67,12 @@ while True:
     connect_str=gen_connect()
     #pyuart.send_message_once(connect_str)
     print('observe',connect_str)
-    maxmin.one_step(connect_str)
-
+    num=connect_str.count('X')
+    numx=str(num)
+    movex=maxmin.one_step(connect_str)
+    yx=f"{numx}{movex}"
+    pyuart.send_message_once(yx)
+    
 
 
 
