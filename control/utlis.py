@@ -77,7 +77,7 @@ def findcircles(img,draw=True,cThr=[50,80]):
     imgThre = cv2.erode(imgDial,kernel,iterations=2)
     if draw:
         cv2.imshow('precircle',imgThre)
-    circles=cv2.HoughCircles(imgThre,cv2.HOUGH_GRADIENT,1,20,param1=80,param2=30,minRadius=20,maxRadius=0)
+    circles=cv2.HoughCircles(imgThre,cv2.HOUGH_GRADIENT,1,20,param1=80,param2=30,minRadius=20,maxRadius=50)
     
         # 确保至少检测到一个圆
     if circles is not None:
@@ -99,7 +99,7 @@ def findcircles(img,draw=True,cThr=[50,80]):
             gray_light=int(gray_light/count)
             cv2.imshow('gray_light',imgGray)
             #print(i[0],i[1],i[2],gray_light,count)
-            pieces.append((i[0]//100+1,i[1]//100+1,1 if gray_light>100 else -1))
+            pieces.append((i[0]//100+1,i[1]//100+1,1 if gray_light>100 else (-1) ))
             pieces_gray.append(gray_light)
             
     # 显示结果

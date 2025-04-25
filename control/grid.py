@@ -3,6 +3,7 @@ import numpy as np
 import utlis
 import maxmin
 import pyuart
+import difftest
 #cv2.resize(src, dsize, dst=None, fx=0, fy=0, interpolation=cv2.INTER_LINEAR)
 
 
@@ -30,15 +31,20 @@ def print_board_avg():
         print('| '+str(board_avg[i][0])+' | '+str(board_avg[i][1])+' | '+str(board_avg[i][2])+' |')
     print(' ---'*3)
 
-def gen_connect():
+def gen_connect(white='X'):
     result = ""
     for i in range (3):
         for j in range(3):
-            result += 'X' if board_avg[i][j] > 0.5 else 'O' if board_avg[i][j] < -0.5 else ' '
+            if white == 'X':
+                result += 'X' if board_avg[i][j] > 0.1 else 'O' if board_avg[i][j] < -0.1 else ' '
+            else:
+                result += 'X' if board_avg[i][j] < -0.1 else 'O' if board_avg[i][j] > 0.1 else ' '
     return result
 
 board_avg = np.zeros((3,3))
 #cap.set(10,1000)
+buffer='NNNNNNNNN'
+first = True
 while True:
     input('press any key to continue')
     board_avg = np.zeros((3,3))
@@ -64,14 +70,34 @@ while True:
     
     board_avg = board_avg / 10
     print_board_avg()
-    connect_str=gen_connect()
+    if first:
+        first=False
+        firststr=gen_connect()
+        if firststr.count(' ')== 9:
+            white='O'
+        else :
+            white='X'
+    connect_str=gen_connect(white)
+    num=connect_str.count('X')
+    numx=str(num)
     #pyuart.send_message_once(connect_str)
     print('observe',connect_str)
     num=connect_str.count('X')
     numx=str(num)
-    movex=maxmin.one_step(connect_str)
-    yx=f"{numx}{movex}"
-    pyuart.send_message_once(yx)
+    #if difftest.regret(buffer,connect_str) or True:
+    if difftest.regret(buffer,connect_str) or num==0:
+        
+        movex=maxmin.one_step(connect_str)
+        yx=f"{'1'}{numx if white == 'O' else str(int(numx)+5)}{movex}"
+        pyuart.send_message_once(yx)
+        buffer_list = list(buffer)
+        
+        if len(movex)>0:
+            index = int(movex) - 1  # 计算索引
+            if 0 <= index < len(buffer_list):  # 检查索引范围
+                buffer_list[index] = 'X'  # 修改指定位置为 'X'        
+            # 将列表转换回字符串
+            buffer = ''.join(buffer_list)
     
 
 

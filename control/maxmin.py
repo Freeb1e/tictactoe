@@ -10,7 +10,7 @@ tree=[]
 step=0
 x,y=0,0
 empty=[]
-
+movex=''
 # find_empty：检查棋盘上的空位
 def find_empty(board):
     empty=[]
@@ -141,7 +141,7 @@ def one_step(board_ob):
     if is_win(board,'X'):
         print('X win')
         print_board()
-        return
+        return str(move)
     print_board()
     return str(move)
 
