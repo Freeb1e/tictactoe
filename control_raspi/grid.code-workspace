@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../opencv_tutorial"
+		},
+		{
+			"path": "../opencv1"
+		}
+	],
+	"settings": {}
+}
